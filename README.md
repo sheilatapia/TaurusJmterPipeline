@@ -1,3 +1,3 @@
 # TaurusJmterPipeline
 Just to reuse the performanceTest pipeline after executions:
-1. Install Taurus
+1. Install Taurus with pip
