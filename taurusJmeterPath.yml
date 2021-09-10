@@ -1,6 +1,6 @@
 scenarios:
   simple:
-    script: /home/sheila/Documentos/jenkins+taurus+jmeter/file.jmx
+    script: file.jmx
 
 modules:
   consolidator:
