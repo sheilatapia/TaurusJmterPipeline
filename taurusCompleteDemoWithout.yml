@@ -1,0 +1,54 @@
+scenarios:
+  Loadtest_1:
+    variables: 
+      var_1: https://blazedemo.com/
+    think-time: 3s
+    requests:
+    - url: ${var_1}/login
+      label: 1.Login
+    - url: ${var_1}
+      assert-xpath:
+      - xpath: "//body/div[2]/h1[text()='Welcome to the Simple Travel Agency!']"
+        use-tolerant-parser: true
+      label: 2.Home
+  Loadtest_2:
+    variables:
+      var_2: https://blazedemo.com/
+    think-time: uniform(5s, 1s)
+    data-sources: 
+    - path: /home/sheila/Documentos/lugares.csv
+    requests:
+    - url: ${var_2}/reserve.php
+      assert:
+      - contains: 
+        - (?s)Flights.+?to
+        subject: body
+        regeexp: true 
+      method: POST
+      body:
+        toPort: ${Destino}
+        fromPort: ${Origen}
+      label: 3.Reservar:${Destino}-${Origen}
+
+modules:
+  consolidator:
+    percentiles:
+    - 25.0
+    - 50.0
+    - 90.0
+    - 99.0
+
+reporting:
+- module: final-stats
+  dump-csv: /home/sheila/Documentos/reportes/report.csv
+
+execution:
+- concurrency: 20
+  ramp-up: 20s
+  hold-for: 30s
+  throughput: 30
+  scenario: Loadtest_1
+- concurrency: 40
+  ramp-up: 40s
+  scenario: Loadtest_2
+  delay: 20s

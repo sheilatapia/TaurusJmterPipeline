@@ -1,0 +1,18 @@
+scenarios:
+  simple:
+    script: /home/sheila/Documentos/jenkins+taurus+jmeter/file.jmx
+
+modules:
+  consolidator:
+    percentiles:
+    - 25.0
+    - 50.0
+    - 90.0
+    - 99.0
+
+execution:
+- concurrency: 20
+  ramp-up: 20s
+  hold-for: 30s
+  throughput: 10
+  scenario: simple
